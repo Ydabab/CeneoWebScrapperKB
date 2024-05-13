@@ -23,16 +23,16 @@
               <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                   <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="index">Strona główna</a>
+                    <a class="nav-link active" aria-current="page" href="{{url_for ('index') }}">Strona główna</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="extract">Ekstrakcja</a>
+                    <a class="nav-link" href="{{url_for ('extract') }}">Ekstrakcja</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="products">Lista produktów</a>
+                    <a class="nav-link" href="{{url_for ('products') }}">Lista produktów</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="about">Autor</a>
+                    <a class="nav-link" href="{{url_for ('about') }}">Autor</a>
                   </li>
                 </ul>
               </div>
@@ -45,7 +45,11 @@
             {% endblock %}
         </section>
         <footer>
-            <p>Krystian Byrgiel, Uniwersytet Ekonomiczny w Krakowie</p>
+            <div class="fixed-bottom">
+              <div class="p-3 mb-2 bg-dark text-white">
+              <p class="text-center">Krystian Byrgiel, Uniwersytet Ekonomiczny w Krakowie</p>
+              </div>
+            </div>
         </footer>
     </div>
 </body>
