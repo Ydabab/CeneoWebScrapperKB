@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
-    <h2>Ekstrakcja opinii</h2>
+    <h2 class="text-center mt-3 mb-3">Ekstrakcja opinii</h2>
+    {% if error is defined %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <strong> Uwaga! </strong> {{error}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
     <form action="{{url_for ('extract') }}" method="post">
         <div class="row g-3 align-items-center">
         <div class="col-auto">
@@ -12,7 +18,7 @@
         <div class="col-auto">
           <span id="IdHelpInline" class="form-text text-white">Kod produktu składa się z 8-10 cyfr.</span>
         </div>
-        <div class="col-auto align-items-center">
+        <div class="col-auto">
             <button type="submit" class="btn btn-light mb-3">Pobierz opinie</button>
         </div>
         </div>      
