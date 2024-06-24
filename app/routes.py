@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 import numpy as np
+from lxml import etree
 import json
 import os
 import io
@@ -109,6 +110,29 @@ def download_csv(product_id):
 
 @app.route('/product/download_xlsx/<product_id>')
 def download_xlsx(product_id):
-    pass
+    opinions = pd.read_json(f"app/opinions/{product_id}.json")
+    opinions.stars = opinions.stars.apply(lambda s: "'" + s)
+    buffer = io.BytesIO()
+    with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+        opinions.to_excel(writer, index=False)
+    buffer.seek(0)
+    return send_file(buffer, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+                     as_attachment=True, download_name=f"{product_id}.xlsx")
 
-
+@app.route('/product/download_xml/<product_id>')
+def download_xml(product_id):
+    opinions = pd.read_json(f"app/opinions/{product_id}.json")
+    opinions['stars'] = opinions['stars'].astype(str)
+    root = etree.Element("Opinions")
+    for _, row in opinions.iterrows():
+        opinion_elem = etree.SubElement(root, "Opinion")
+        for field in row.index:
+            field_elem = etree.SubElement(opinion_elem, field)
+            field_elem.text = str(row[field])
+    buffer = io.BytesIO()
+    tree = etree.ElementTree(root)
+    tree.write(buffer, pretty_print=True, xml_declaration=True, encoding='UTF-8')
+    buffer.seek(0)
+    
+    return send_file(buffer, "application/xml", 
+                     as_attachment=True, download_name=f"{product_id}.xml")
